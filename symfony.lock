@@ -17,9 +17,7 @@
             "ref": "ddddd8249dd55bbda16fa7a45bb7499ef6f8e90e"
         },
         "files": [
-            "./config/packages/doctrine.yaml",
-            "./src/Entity/.gitignore",
-            "./src/Repository/.gitignore"
+            "./config/packages/doctrine.yaml"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
