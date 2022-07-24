@@ -7,56 +7,6 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light border-bottom border-white border-5">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <span data-bs-toggle="modal" data-bs-target="#patienceModal">
-            <a class="navbar-brand" href="">
-           {{ app.request.server.get('NOM_SITE') }}
-            </a>
-        </span>
-
-            {% if  is_granted('ROLE_USER') %}
-                <div class="d-lg-none d-lg-block">
-
-                </div>
-            {% else %}
-                {#   <div class="d-lg-none d-lg-block">
-                <a class="nav-link text-black-50" href="{{ path('app_login') }}">Se connecter</a>
-            </div>
-                #}
-            {% endif %}
-
-
-            <div class="collapse navbar-collapse fontSizeLarge" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link {{ app.request.get('_route')=='liste' ? 'active' :'' }}" aria-current="page"
-                           href="">Liste</a>
-                    </li>
-                    <li class="nav-item" data-bs-toggle="modal" data-bs-target="#patienceModal">
-                        <a class="nav-link {{ app.request.get('_route')=='page_graphs' ? 'active' :'' }}"
-                           href="">Graphique </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link {{ app.request.get('_route')=='vos_niveaux' ? 'active' :'' }}"
-                           href="">Vos Niveaux</a>
-                    </li>
-
-                </ul>
-
-            </div>
-        </div>
-    </nav>
-
-
-    <br><br><br><br>
-
     <div class="dropdown">
 
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -77,9 +27,9 @@
         <li>Your template at <code><a href="{{ 'H:/Christophe/Documents/DOMAINES/SYMFONY/symfony-hexa/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
     </ul>
 </div>
-    <div class="alert alert-primary" role="alert">
-        BootStrap
+    <div class="alert alert-primary" role="alert" data-controller="hello">
+        BootStrap ok mais pas Stimulus
     </div>
-    <p class="">Placeholder text to demonstrate some <a href="#" data-bs-toggle="tooltip" data-bs-title="Default tooltip">inline links</a> with tooltips. This is now just filler, no killer. Content placed here just to mimic the presence of <a href="#" data-bs-toggle="tooltip" data-bs-title="Another tooltip">real text</a>. And all that just to give you an idea of how tooltips would look when used in real-world situations. So hopefully you've now seen how <a href="#" data-bs-toggle="tooltip" data-bs-title="Another one here too">these tooltips on links</a> can work in practice, once you use them on <a href="#" data-bs-toggle="tooltip" data-bs-title="The last tip!">your own</a> site or project.
-    </p>
+    <a href="#" data-bs-toggle="tooltip" data-bs-title="Default tooltip">tooltip</a>
+
 {% endblock %}
