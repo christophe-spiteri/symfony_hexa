@@ -59,6 +59,7 @@ Encore
     .enableSassLoader()
     .enableLessLoader()
     .enableStylusLoader()
+    .enablePostCssLoader()
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
 
