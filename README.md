@@ -12,8 +12,8 @@ Symfony 6 préparé pour faire de l'héxa
 Cloner le project
 
 ```bash
-composer instal
-npn instal
+composer install
+npm install
 npm run build
 
 ```
