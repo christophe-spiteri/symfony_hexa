@@ -24,8 +24,6 @@ services:
     # please note that last definitions always *replace* previous ones
     Domain\:
         resource: '../src/Domain'
-        exclude:
-            - '../src/Domain/Entity/'
 
     Infrastructure\:
         resource: '../src/Infrastructure'
@@ -35,3 +33,9 @@ services:
     Infrastructure\Symfony\Controller\:
         resource: '../src/Infrastructure/Symfony/Controller/'
         tags: ['controller.service_arguments']
+
+    Api\:
+        resource: "../src/Api/"
+
+    Adapter\:
+        resource: "../src/Adapter"
