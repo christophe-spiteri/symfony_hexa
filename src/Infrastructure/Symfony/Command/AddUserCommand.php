@@ -50,7 +50,7 @@ class AddUserCommand extends Command
         $u = new User();
         $u->setUsername($user);
         $u->setPassword($pass);
-        $u->setRoles([$role ?? 'USER']);
+        $u->setRoles([$role ?? 'ROLE_USER']);
         $this->userRepository->add($u, true);
         $io->success(sprintf('User : %s , Pass : %s Role : %s', $user, $pass, $role));
 

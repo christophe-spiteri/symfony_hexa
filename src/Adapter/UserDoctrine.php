@@ -21,7 +21,7 @@ class UserDoctrine implements UserInterface
         return $this->security->getUser();
     }
 
-    public function listUser():?array
+    public function listUser(): ?array
     {
         return $this->userRepository->findAll();
     }

@@ -4,8 +4,10 @@ namespace Infrastructure\Symfony\Form;
 
 use Infrastructure\Symfony\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserType extends AbstractType
 {
@@ -13,15 +15,22 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('roles')
-           ->add('password')
-        ;
+            ->add('Roles', ChoiceType::class, [
+                'required' => true,
+                'multiple' => true,
+                'expanded' => false,
+                'choices'  => [
+                    'User'  => 'ROLE_USER',
+                    'Admin' => 'ROLE_ADMIN',
+                ],
+            ])
+            ->add('password');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
+                                   'data_class' => User::class,
+                               ]);
     }
 }
