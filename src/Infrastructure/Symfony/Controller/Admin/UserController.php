@@ -25,7 +25,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserRepository $userRepository): Response
+    public function new(Request $request, UserApi $userApi): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -33,7 +33,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $userRepository->add($user, true);
+            $userApi->addUser($user, true);
             return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
         }
         //dd($user,$form);

@@ -18,6 +18,9 @@
     </php>
 
     <testsuites>
+        <testsuite name="quick">
+            <directory>tests/Domain</directory>
+        </testsuite>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
         </testsuite>
@@ -27,6 +30,9 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <file>src/Infrastructure/Symfony/Kernel.php</file>
+        </exclude>
     </coverage>
 
     <listeners>

@@ -1,26 +1,27 @@
 <?php
 
-namespace Infrastructure\Symfony\Test\Controller;
+namespace App\Tests\Controller;
 
 use Infrastructure\Symfony\Entity\User;
-use Infrastructure\Symfony\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private UserRepository $repository;
     private string $path = '/admin/user/';
+    private $apiUser;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = (static::getContainer()->get('doctrine'))->getRepository(User::class);
-
-        foreach ($this->repository->findAll() as $object) {
-            $this->repository->remove($object, true);
-        }
+        //$this->createKernel(['KERNEL_CLASS'=>'src/Infrastructure/Symfony']);
+        /*      $this->repository = (static::getContainer()->get('doctrine'))->getRepository(User::class);
+           foreach ($this->repository->findAll() as $object) {
+               $this->repository->remove($object, true);
+           }
+    */
+        $this->apiUser = (static::getContainer()->get("Api\UserApi"));
     }
 
     public function testIndex(): void
@@ -36,33 +37,32 @@ class UserControllerTest extends WebTestCase
 
     public function testNew(): void
     {
-        $originalNumObjectsInRepository = count($this->repository->findAll());
-
-        $this->markTestIncomplete();
+        $originalNumObjectsInRepository = count($this->apiUser->getListeUser());
+        //$this->markTestIncomplete();
         $this->client->request('GET', sprintf('%snew', $this->path));
 
         self::assertResponseStatusCodeSame(200);
 
         $this->client->submitForm('Save', [
-            'user[username]' => 'Testing',
-            'user[roles]' => 'Testing',
+            'user[username]' => 'Testing' . (string)time(),
+            'user[Roles]'    => ['ROLE_ADMIN'],
             'user[password]' => 'Testing',
         ]);
 
         self::assertResponseRedirects('/admin/user/');
 
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+        self::assertSame($originalNumObjectsInRepository + 1, count($this->apiUser->getListeUser()));
     }
 
     public function testShow(): void
     {
-        $this->markTestIncomplete();
+        //$this->markTestIncomplete();
         $fixture = new User();
-        $fixture->setUsername('My Title');
-        $fixture->setRoles('My Title');
+        $fixture->setUsername('My Title' . (string)time());
+        $fixture->setRoles(['ROLE_USER']);
         $fixture->setPassword('My Title');
 
-        $this->repository->add($fixture, true);
+        $this->apiUser->addUser($fixture, true);
 
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
 
@@ -74,50 +74,48 @@ class UserControllerTest extends WebTestCase
 
     public function testEdit(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new User();
-        $fixture->setUsername('My Title');
-        $fixture->setRoles('My Title');
+        //$this->markTestIncomplete();
+        $aleatoire = (string)time();
+        $fixture   = new User();
+        $fixture->setUsername('Modif-' . $aleatoire);
+        $fixture->setRoles(['ROLE_USER']);
         $fixture->setPassword('My Title');
-
-        $this->repository->add($fixture, true);
-
+        $this->apiUser->addUser($fixture, true);
         $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
 
         $this->client->submitForm('Update', [
-            'user[username]' => 'Something New',
-            'user[roles]' => 'Something New',
+            'user[username]' => $aleatoire . ' New',
+            'user[Roles]'    => ['ROLE_ADMIN'],
             'user[password]' => 'Something New',
         ]);
 
         self::assertResponseRedirects('/admin/user/');
 
-        $fixture = $this->repository->findAll();
-
-        self::assertSame('Something New', $fixture[0]->getUsername());
-        self::assertSame('Something New', $fixture[0]->getRoles());
-        self::assertSame('Something New', $fixture[0]->getPassword());
+        $fixture = $this->apiUser->findUserById($fixture->getId());
+        self::assertSame($aleatoire . ' New', $fixture->getUsername());
+        self::assertSame("ROLE_ADMIN,ROLE_USER", implode(',', $fixture->getRoles()));
+        // self::assertSame('', $fixture->getPassword());
     }
 
     public function testRemove(): void
     {
-        $this->markTestIncomplete();
+        //$this->markTestIncomplete();
 
-        $originalNumObjectsInRepository = count($this->repository->findAll());
+        $originalNumObjectsInRepository = count($this->apiUser->getListeUser());
 
         $fixture = new User();
-        $fixture->setUsername('My Title');
-        $fixture->setRoles('My Title');
+        $fixture->setUsername('My Title del');
+        $fixture->setRoles(['ROLE_USER']);
         $fixture->setPassword('My Title');
 
-        $this->repository->add($fixture, true);
+        $this->apiUser->addUser($fixture, true);
 
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+        self::assertSame($originalNumObjectsInRepository + 1, count($this->apiUser->getListeUser()));
 
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
         $this->client->submitForm('Delete');
 
-        self::assertSame($originalNumObjectsInRepository, count($this->repository->findAll()));
+        self::assertSame($originalNumObjectsInRepository, count($this->apiUser->getListeUser()));
         self::assertResponseRedirects('/admin/user/');
     }
 }
