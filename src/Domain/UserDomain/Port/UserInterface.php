@@ -15,5 +15,6 @@ interface UserInterface
     public function listUser(): ?array;
     public function addUser($user, $flush):void;
     public function findUserById($id):?User;
+    public function isUniqueUserName(?string $getUsername):bool;
 
 }

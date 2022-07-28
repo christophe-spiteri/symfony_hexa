@@ -4,10 +4,14 @@ namespace Api;
 
 use Infrastructure\Symfony\Entity\User;
 use Domain\UserDomain\Port\UserInterface;
+use Domain\UserDomain\Validator\ValidatorUser;
 
 class UserApi
 {
-    public function __construct(private UserInterface $userInterface)
+    public function __construct(
+        private UserInterface $userInterface,
+        private ValidatorUser $validationUser
+    )
     {
 
     }
@@ -19,7 +23,10 @@ class UserApi
 
     public function addUser(User $user, $flush = false)
     {
-        $this->userInterface->addUser($user, $flush);
+        if ($this->validationUser->valide($user)) {
+            $this->userInterface->addUser($user, $flush);
+        }
+
     }
 
     public function findUserById($id): ?User

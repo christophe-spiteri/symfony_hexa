@@ -4,8 +4,10 @@ namespace Infrastructure\Symfony\Controller\Admin;
 
 
 use Api\UserApi;
+use Symfony\Component\Form\FormError;
 use Infrastructure\Symfony\Entity\User;
 use Infrastructure\Symfony\Form\UserType;
+use Domain\UserDomain\Exception\ExceptionUser;
 use Infrastructure\Symfony\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +32,14 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-
+        //$form->get('username')->addError(new FormError('error de name'));
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $userApi->addUser($user, true);
-            return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
+            try {
+                $userApi->addUser($user, true);
+                return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
+            } catch (ExceptionUser $e) {
+                $form->get($e->getField())->addError(new FormError($e->getMessage()));
+            }
         }
         //dd($user,$form);
         return $this->renderForm('admin/user/new.html.twig', [
@@ -72,7 +77,7 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $userRepository->remove($user, true);
         }
 

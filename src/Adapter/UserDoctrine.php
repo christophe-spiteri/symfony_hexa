@@ -41,4 +41,9 @@ class UserDoctrine extends UserRepository implements UserInterface
     {
         return $this->userRepository->find($id);
     }
+    public function isUniqueUserName($username): bool
+    {
+        return count($this->userRepository->findBy(['username'=>$username]));
+    }
+
 }
