@@ -1,7 +1,8 @@
 <?php
 
-namespace Api;
+namespace Domain\UserDomain\Api;
 
+use Domain\UserDomain\UserDto;
 use Infrastructure\Symfony\Entity\User;
 use Domain\UserDomain\Port\UserInterface;
 use Domain\UserDomain\Validator\ValidatorUser;
@@ -21,12 +22,20 @@ class UserApi
         return $this->userInterface->listUser();
     }
 
-    public function addUser(User $user, $flush = false)
+    public function addUser(UserDto $user, $flush = false): ?UserDto
     {
         if ($this->validationUser->valide($user)) {
-            $this->userInterface->addUser($user, $flush);
+            return $this->userInterface->addUser($user, $flush);
         }
+        return null;
+    }
 
+    public function updateUser(UserDto $user, $flush = false): ?UserDto
+    {
+        if ($this->validationUser->valide($user)) {
+            return $this->userInterface->updateUser($user, $flush);
+        }
+        return null;
     }
 
     public function findUserById($id): ?User

@@ -60,7 +60,7 @@
     "autoload": {
         "psr-4": {
             "Domain\\": "src/Domain/",
-            "Api\\": "src/Api/",
+            "Api\\": "src/Domain/UserDomain/Api/",
             "Adapter\\": "src/Adapter/",
             "Infrastructure\\": "src/Infrastructure/"
         }

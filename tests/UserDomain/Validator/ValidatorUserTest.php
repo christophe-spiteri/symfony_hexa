@@ -2,7 +2,7 @@
 
 namespace App\Tests\UserDomain\Validator;
 
-use Infrastructure\Symfony\Entity\User;
+use Domain\UserDomain\UserDto;
 use Domain\UserDomain\Exception\ExceptionUser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -15,8 +15,8 @@ class ValidatorUserTest extends WebTestCase
     protected function setUp(): void
     {
         $this->validator = (static::getContainer()->get("Domain\UserDomain\Validator\ValidatorUser"));
-        $this->apiUser   = (static::getContainer()->get("Api\UserApi"));
-        $this->user      = new User();
+        $this->apiUser   = (static::getContainer()->get("Domain\UserDomain\Api\UserApi"));
+        $this->user      = new UserDto();
     }
 
     public function test_isEmpty_Username()
@@ -32,7 +32,7 @@ class ValidatorUserTest extends WebTestCase
         $this->expectException(ExceptionUser::class);
         $this->expectExceptionMessage('Nom déjà utilisé, en choisir un autre');
 
-        $fixture = new User();
+        $fixture = new UserDto();
         $aleatoire = (string)time();
 
         $fixture->setUsername('UserDejaPresent'.$aleatoire);

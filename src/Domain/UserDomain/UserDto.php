@@ -15,8 +15,11 @@ class UserDto
 
     private ?string $password = null;
 
-    public function __construct(User $user)
+    public function __construct(?User $user = null)
     {
+        if (!$user) {
+            return;
+        }
         $this->id       = $user->getId();
         $this->username = $user->getUsername();
         $this->password = $user->getPassword();
@@ -26,6 +29,11 @@ class UserDto
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId($id):void
+    {
+        $this->id = $id;
     }
 
     public function getUsername(): ?string
@@ -47,7 +55,7 @@ class UserDto
 
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $roles   = $this->roles;
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -61,12 +69,12 @@ class UserDto
     }
 
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 

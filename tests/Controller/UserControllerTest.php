@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use Domain\UserDomain\UserDto;
 use Infrastructure\Symfony\Entity\User;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -21,7 +22,7 @@ class UserControllerTest extends WebTestCase
                $this->repository->remove($object, true);
            }
     */
-        $this->apiUser = (static::getContainer()->get("Api\UserApi"));
+        $this->apiUser = (static::getContainer()->get("Domain\UserDomain\Api\UserApi"));
     }
 
     public function testIndex(): void
@@ -57,7 +58,7 @@ class UserControllerTest extends WebTestCase
     public function testShow(): void
     {
         //$this->markTestIncomplete();
-        $fixture = new User();
+        $fixture = new UserDto();
         $fixture->setUsername('My Title' . (string)time());
         $fixture->setRoles(['ROLE_USER']);
         $fixture->setPassword('My Title');
@@ -74,19 +75,19 @@ class UserControllerTest extends WebTestCase
 
     public function testEdit(): void
     {
-        //$this->markTestIncomplete();
         $aleatoire = (string)time();
-        $fixture   = new User();
+        $fixture   = new UserDto();
         $fixture->setUsername('Modif-' . $aleatoire);
         $fixture->setRoles(['ROLE_USER']);
         $fixture->setPassword('My Title');
-        $this->apiUser->addUser($fixture, true);
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
+        $user=$this->apiUser->addUser($fixture, true);
 
+        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $user->getId()));
+        //dd(sprintf('%s%s/edit', $this->path, $user->getId()));
         $this->client->submitForm('Update', [
             'user[username]' => $aleatoire . ' New',
             'user[Roles]'    => ['ROLE_ADMIN'],
-            'user[password]' => 'Something New',
+           'user[password]' => 'azerty',
         ]);
 
         self::assertResponseRedirects('/admin/user/');
@@ -103,7 +104,7 @@ class UserControllerTest extends WebTestCase
 
         $originalNumObjectsInRepository = count($this->apiUser->getListeUser());
 
-        $fixture = new User();
+        $fixture = new UserDto();
         $fixture->setUsername('My Title del');
         $fixture->setRoles(['ROLE_USER']);
         $fixture->setPassword('My Title');

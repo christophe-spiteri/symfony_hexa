@@ -3,10 +3,12 @@
 namespace Infrastructure\Symfony\Controller\Admin;
 
 
-use Api\UserApi;
+use Domain\UserDomain\UserDto;
+use Domain\UserDomain\Api\UserApi;
 use Symfony\Component\Form\FormError;
 use Infrastructure\Symfony\Entity\User;
 use Infrastructure\Symfony\Form\UserType;
+use Adapter\UserAdapter\UserEntityDtoMapping;
 use Domain\UserDomain\Exception\ExceptionUser;
 use Infrastructure\Symfony\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,9 +29,9 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserApi $userApi): Response
+    public function new(Request $request, UserApi $userApi, UserEntityDtoMapping $userEntityDtoMapping): Response
     {
-        $user = new User();
+        $user = new UserDto();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         //$form->get('username')->addError(new FormError('error de name'));
@@ -57,13 +59,15 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_admin_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(Request              $request, User $user, UserApi $userApi,
+                         UserEntityDtoMapping $userEntityDtoMapping): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $dto=$userEntityDtoMapping->ToDto($user);
+        $form = $this->createForm(UserType::class, $dto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->add($user, true);
+           $userApi->updateUser($dto, true);
 
             return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
         }

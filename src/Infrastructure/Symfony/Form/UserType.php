@@ -2,9 +2,8 @@
 
 namespace Infrastructure\Symfony\Form;
 
-use Infrastructure\Symfony\Entity\User;
+use Domain\UserDomain\UserDto;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,13 +23,14 @@ class UserType extends AbstractType
                     'Admin' => 'ROLE_ADMIN',
                 ],
             ])
-            ->add('password');
+            ->add('password')
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-                                   'data_class' => User::class,
+                                   'data_class' => UserDto::class,
                                ]);
     }
 }

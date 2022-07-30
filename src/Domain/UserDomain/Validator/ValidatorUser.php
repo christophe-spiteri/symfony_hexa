@@ -2,13 +2,14 @@
 
 namespace Domain\UserDomain\Validator;
 
+use Domain\UserDomain\UserDto;
 use Infrastructure\Symfony\Entity\User;
 use Domain\UserDomain\Port\UserInterface;
 use Domain\UserDomain\Exception\ExceptionUser;
 
 class ValidatorUser
 {
-    private User $user;
+    private UserDto $user;
 
     public function __construct(private UserInterface $repositoryUser)
     {
@@ -20,7 +21,7 @@ class ValidatorUser
      *
      * @return bool|ExceptionUser
      */
-    public function valide(User $user):bool|ExceptionUser
+    public function valide(UserDto $user):bool|ExceptionUser
     {
         $this->user = $user;
         $this->isEmpty();
@@ -39,7 +40,7 @@ class ValidatorUser
 
     private function isUniqueUserName()
     {
-        if ($this->repositoryUser->isUniqueUserName($this->user->getUsername())) {
+        if (!$this->repositoryUser->isUniqueUserName($this->user)) {
             throw(new ExceptionUser('username', 'Nom déjà utilisé, en choisir un autre'));
         }
     }

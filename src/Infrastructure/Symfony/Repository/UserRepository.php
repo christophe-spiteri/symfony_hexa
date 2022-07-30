@@ -20,7 +20,9 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry, private UserPasswordHasherInterface $passwordHasher)
+    public function __construct(
+        ManagerRegistry                     $registry,
+        private UserPasswordHasherInterface $passwordHasher)
     {
         parent::__construct($registry, User::class);
     }
@@ -34,6 +36,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $entity->setPassword($hashedPassword);
         $this->getEntityManager()->persist($entity);
 
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function update(User $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
         if ($flush) {
             $this->getEntityManager()->flush();
         }
