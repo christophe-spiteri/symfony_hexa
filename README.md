@@ -15,7 +15,9 @@ Cloner le project
 composer install
 npm install
 npm run build
-
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+php bin/console d:f:l
 ```
 
 ## Authors
