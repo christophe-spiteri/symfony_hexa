@@ -1,9 +1,9 @@
 
 # Symfony Hexa
 
-Symfony 6 préparé pour faire de l'héxa
+Symfony 6.1 préparé pour faire de l'héxa
 
-- Symfony 6
+- Symfony 6.1
 - Web pack encore
 
 
