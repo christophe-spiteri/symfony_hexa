@@ -5,7 +5,7 @@ Symfony 6.1 préparé pour faire de l'héxa
 
 - Symfony 6.1
 - Web pack encore
-
+- User login
 
 ## Installation
 
