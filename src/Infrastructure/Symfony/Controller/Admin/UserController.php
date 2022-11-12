@@ -45,7 +45,6 @@ class UserController extends AbstractController
                 $form->get($e->getField())->addError(new FormError($e->getMessage()));
             }
         }
-        //dd($user,$form);
         return $this->renderForm('admin/user/new.html.twig', [
             'user' => $user,
             'form' => $form,
